@@ -122,6 +122,7 @@ class LoginConfirmAPI(generics.GenericAPIView):
             return Response({'message': "Confirmation code incorrect!"}, status=status.HTTP_400_BAD_REQUEST)
         user = Account.objects.filter(phone=phone).first()
         token = Token.objects.get(user=user)
+        v.delete()
         data = {
             'message': 'User verified',
             'token': str(token.key),
