@@ -5,13 +5,13 @@ from rest_framework import serializers
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['phone', 'password']
+        fields = ['phone']
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['phone', 'password']
+        fields = ['phone']
 
 
 class VerifyPhoneSerializer(serializers.ModelSerializer):

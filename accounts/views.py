@@ -22,9 +22,9 @@ class RegisterAPI(generics.GenericAPIView):
         ver = VerifyPhone.objects.filter(phone=phone).first()
         if ver:
             ver.delete()
-            code = str(randint(100000, 1000000))
-            verify(phone, code)
-            VerifyPhone.objects.create(phone=phone, code=code)
+        code = str(randint(100000, 1000000))
+        verify(phone, code)
+        VerifyPhone.objects.create(phone=phone, code=code)
         return Response({"success": True, 'message': "A confirmation code was sent to the phone number!!!"},
                         status=status.HTTP_200_OK)
 
@@ -41,35 +41,49 @@ class RegisterConfirmAPI(generics.GenericAPIView):
         v = VerifyPhone.objects.filter(phone=phone, code=code).first()
         if not v:
             return Response({'message': "Confirmation code incorrect!"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'message': "Confirmation code correct!"}, status=status.HTTP_200_OK)
-
-
-class CreateUserAPIView(generics.GenericAPIView):
-    queryset = Account.objects.all()
-    serializer_class = VerifyPhoneSerializer2
-
-    def post(self, request, *args, **kwargs):
-        phone = self.request.data['phone']
-        code = self.request.data['code']
-        password = self.request.data['password']
-        v = VerifyPhone.objects.filter(phone=phone, code=code).first()
-        if v:
-            v.delete()
-        else:
-            return Response({'message': "Confirmation code incorrect!"}, status=status.HTTP_400_BAD_REQUEST)
         user = Account.objects.create(
             phone=phone,
-            password=password
+            password="12345678"
         )
         user.is_active = True
         user.save()
         token = Token.objects.create(user=user)
+        v.delete()
         data = {
             'message': 'User verified',
             'token': str(token.key),
             "user_id": user.id
         }
         return Response(data, status=status.HTTP_201_CREATED)
+
+
+#
+# class CreateUserAPIView(generics.GenericAPIView):
+#     queryset = Account.objects.all()
+#     serializer_class = VerifyPhoneSerializer2
+#
+#     def post(self, request, *args, **kwargs):
+#         phone = self.request.data['phone']
+#         code = self.request.data['code']
+#         password = self.request.data['password']
+#         v = VerifyPhone.objects.filter(phone=phone, code=code).first()
+#         if v:
+#             v.delete()
+#         else:
+#             return Response({'message': "Confirmation code incorrect!"}, status=status.HTTP_400_BAD_REQUEST)
+#         user = Account.objects.create(
+#             phone=phone,
+#             password=password
+#         )
+#         user.is_active = True
+#         user.save()
+#         token = Token.objects.create(user=user)
+#         data = {
+#             'message': 'User verified',
+#             'token': str(token.key),
+#             "user_id": user.id
+#         }
+#         return Response(data, status=status.HTTP_201_CREATED)
 
 
 class LoginAPI(generics.GenericAPIView):
@@ -81,16 +95,39 @@ class LoginAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         phone = request.data['phone']
-        pas = request.data['password']
-        user = Account.objects.filter(phone=phone, password=pas).first()
+        user = Account.objects.filter(phone=phone).first()
         if not user:
-            return Response({'message': 'Login yoki parol xatoro sal'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        v = VerifyPhone.objects.filter(phone=phone)
+        if v:
+            v.delete()
+        code = str(randint(100000, 1000000))
+        verify(phone, code)
+        VerifyPhone.objects.create(phone=phone, code=code)
+        return Response({"success": True, 'message': "A confirmation code was sent to the phone number!!!"},
+                        status=status.HTTP_200_OK)
+
+
+class LoginConfirmAPI(generics.GenericAPIView):
+    queryset = Account.objects.all()
+    serializer_class = VerifyPhoneSerializer
+
+    def post(self, request, *args, **kwargs):
+        phone = self.request.data['phone']
+        code = self.request.data['code']
+        if not phone or not code:
+            return Response({'message': "Phone or code not exist"}, status=404)
+        v = VerifyPhone.objects.filter(phone=phone, code=code).first()
+        if not v:
+            return Response({'message': "Confirmation code incorrect!"}, status=status.HTTP_400_BAD_REQUEST)
+        user = Account.objects.filter(phone=phone).first()
         token = Token.objects.get(user=user)
-        data = dict()
-        data['token'] = token.key
-        data['success'] = True
-        data['user_id'] = user.id
-        return Response(data, status=status.HTTP_200_OK)
+        data = {
+            'message': 'User verified',
+            'token': str(token.key),
+            "user_id": user.id
+        }
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class LogoutAPIView(APIView):

@@ -2,9 +2,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from payme.views import MerchantAPIView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+
+class PaymeCallBackAPIView(MerchantAPIView):
+    def create_transaction(self, order_id, action, *args, **kwargs) -> None:
+        print(f"create_transaction for order_id: {order_id}, response: {action}")
+
+    def perform_transaction(self, order_id, action, *args, **kwargs) -> None:
+        print(f"perform_transaction for order_id: {order_id}, response: {action}")
+
+    def cancel_transaction(self, order_id, action, *args, **kwargs) -> None:
+        print(f"cancel_transaction for order_id: {order_id}, response: {action}")
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -33,7 +46,8 @@ urlpatterns = [
     path('place/', include('place.urls')),
     path('preparation/', include('preperation.urls')),
     path('accounts/', include('accounts.urls')),
-    path('order/', include('orders.urls'))
+    path('order/', include('orders.urls')),
+    path("payments/merchant/", PaymeCallBackAPIView.as_view()),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

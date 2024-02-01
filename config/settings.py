@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
+    'payme',
 
     'accounts',
     'main',
@@ -114,3 +115,12 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PAYME: dict = {
+    'PAYME_ID': '656d9a2694dc4293bdd4712d',
+    'PAYME_KEY': 'txig0epiUPBMaY3c&#senn29SU4wh3ejQaO#',
+    'PAYME_URL': 'my-psixolog.uz',
+    'PAYME_CALL_BACK_URL': 'my-psixolog.uz',  # merchant api callback url
+    'PAYME_MIN_AMOUNT': '10000',  # integer field
+    'PAYME_ACCOUNT': 'order_id',
+}

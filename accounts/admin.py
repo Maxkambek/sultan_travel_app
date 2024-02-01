@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Account, AccountDetails
+from .models import Account, AccountDetails, VerifyPhone
+
+
+@admin.register(VerifyPhone)
+class ModelNameAdmin(admin.ModelAdmin):
+    pass
 
 
 class AccountDetailsAdmin(admin.StackedInline):
