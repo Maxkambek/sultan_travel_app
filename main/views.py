@@ -1,6 +1,11 @@
-from .serializers import NewsSerializer, TourSerializer
-from .models import News, Tour
+from .serializers import NewsSerializer, TourSerializer, PhoneSerializer
+from .models import News, Tour, Phone
 from rest_framework import generics
+
+
+class PhoneList(generics.ListAPIView):
+    queryset = Phone.objects.all()
+    serializer_class = PhoneSerializer
 
 
 class NewsListAPIView(generics.ListAPIView):
@@ -16,4 +21,3 @@ class ToursListAPIView(generics.ListAPIView):
 class TourDetailAPIView(generics.RetrieveAPIView):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
-

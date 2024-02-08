@@ -1,5 +1,11 @@
-from .models import News, Tour
+from .models import News, Tour, Phone
 from rest_framework import serializers
+
+
+class PhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = '__all__'
 
 
 class NewsSerializer(serializers.ModelSerializer):

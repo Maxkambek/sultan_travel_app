@@ -27,3 +27,11 @@ class Tour(models.Model):
     class Meta:
         verbose_name = 'Tur'
         verbose_name_plural = "Turlar"
+
+
+class Phone(models.Model):
+    phone = models.CharField(max_length=23)
+    branch_name = models.CharField(max_length=123)
+
+    def __str__(self):
+        return self.branch_name
