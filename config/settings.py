@@ -23,6 +23,7 @@ CKEDITOR_CONFIGS = {
 AUTH_USER_MODEL = 'accounts.Account'
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'ckeditor',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -99,8 +101,28 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
-LANGUAGE_CODE = 'uz'
+LANGUAGES = (
+
+    ('uz', 'Uzbek'),
+    ('ky', 'Kyrgyz')
+)
+
+DEFAULT_LANGUAGE = 2
+LANGUAGE_CODE = 'ky'
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ky'
+MODELTRANSLATION_LANGUAGES = ('ky', 'uz')
+MODELTRANSLATION_TRANSLATION_FILES = (
+    'duolar.translation',
+    'handbook.translation',
+    'main.translation',
+    'place.translation',
+    'preperation.translation'
+)
 
 TIME_ZONE = 'Asia/Tashkent'
 

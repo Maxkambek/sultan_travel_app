@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
@@ -40,6 +41,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path("payments/merchant/", PaymeCallBackAPIView.as_view()),
+]
+urlpatterns += i18n_patterns(
     path('news/', include('main.urls')),
     path('duolar/', include('duolar.urls')),
     path('handbook/', include('handbook.urls')),
@@ -47,7 +51,6 @@ urlpatterns = [
     path('preparation/', include('preperation.urls')),
     path('accounts/', include('accounts.urls')),
     path('order/', include('orders.urls')),
-    path("payments/merchant/", PaymeCallBackAPIView.as_view()),
-]
+)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

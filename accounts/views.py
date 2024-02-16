@@ -7,7 +7,7 @@ from rest_framework.views import Response, APIView
 from random import randint
 from .utils import verify
 from .serializers import RegisterSerializer, LoginSerializer, VerifyPhoneSerializer, AccountDetailsSerializer, \
-    VerifyPhoneSerializer2
+    VerifyPhoneSerializer2, AccountSerializer
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -149,6 +149,32 @@ class LogoutAPIView(APIView):
 class AccountDetailCreateAPIView(generics.CreateAPIView):
     queryset = AccountDetails.objects.all()
     serializer_class = AccountDetailsSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        user = Account.objects.filter(id=request.user.id).first()
+        if user.name:
+            pass
+        else:
+            user.name = self.request.data.get('full_name')
+            user.save()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class AccountRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
 
 
 class AccountDetailListAPIView(generics.ListAPIView):

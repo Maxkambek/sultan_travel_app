@@ -2,6 +2,12 @@ from .models import Account, AccountDetails, VerifyPhone
 from rest_framework import serializers
 
 
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['id', 'name']
+
+
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
