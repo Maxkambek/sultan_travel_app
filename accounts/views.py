@@ -169,6 +169,14 @@ class AccountDetailCreateAPIView(generics.CreateAPIView):
         serializer.save()
 
 
+class AccountDetailRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = AccountDetails.objects.all()
+    serializer_class = AccountDetailsSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+
+
 class AccountRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
