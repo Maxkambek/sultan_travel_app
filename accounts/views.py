@@ -121,7 +121,10 @@ class LoginConfirmAPI(generics.GenericAPIView):
         if not v:
             return Response({'message': "Confirmation code incorrect!"}, status=status.HTTP_400_BAD_REQUEST)
         user = Account.objects.filter(phone=phone).first()
-        token = Token.objects.get(user=user)
+        try:
+            token = Token.objects.get(user=user)
+        except:
+            token = Token.objects.create(user=user)
         v.delete()
         data = {
             'message': 'User verified',
@@ -176,13 +179,11 @@ class AccountDetailRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-
 class AccountRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
-
 
 
 class AccountDetailListAPIView(generics.ListAPIView):

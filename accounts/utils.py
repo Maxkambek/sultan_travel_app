@@ -4,7 +4,7 @@ import requests
 def verify(phone, code):
     url = "http://notify.eskiz.uz/api/message/sms/send"
     headers = {
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDQ4MDk0ODAsImlhdCI6MTcwMjIxNzQ4MCwicm9sZSI6InVzZXIiLCJzdWIiOiIxMDUzIn0.68hdV55gTrUTvnV4VoUTIhzUxWuHIejPOvefUW7abzU"}
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTEwMTg0MzUsImlhdCI6MTcwODQyNjQzNSwicm9sZSI6InVzZXIiLCJzaWduIjoiMjMzNWM0NDdjZjRiMmVjNjI1ODFkZTkyMTljODI3NjM0Y2VhYmVjOWU5Yzg3ZjRhMjVmNzU0ZjU0OTA2MzIwNCIsInN1YiI6IjQyNDcifQ.gqD09z2NF8iBWsM6wTiI87PLzHUZba8xbN90sKO8Ow4"}
     data = {
         'mobile_phone': phone,
         'message': code,
