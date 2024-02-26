@@ -13,11 +13,10 @@ class OrderCreateAPIView(generics.CreateAPIView):
 class OrderListAPIView(generics.ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderListSerializer
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Order.objects.filter(user=self.request.user)
+        order_id = self.request.query_params.get('order_id')
+        queryset = Order.objects.filter(id=order_id)
         return queryset
 
 
