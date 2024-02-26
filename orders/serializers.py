@@ -10,7 +10,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
-    tour = TourSerializer(many=True)
+    tour = TourSerializer(many=False)
 
     class Meta:
         model = Order
